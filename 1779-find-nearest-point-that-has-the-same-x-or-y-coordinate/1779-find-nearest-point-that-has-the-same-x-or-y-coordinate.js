@@ -1,35 +1,20 @@
-function nearestValidPoint(x, y, points) {
-  // ========================
-  function distance(arr1, arr2) {
-    let result = Math.abs(arr1[0] - arr2[0]) + Math.abs(arr1[1] - arr2[1]);
-    return result;
-  }
-  // ========================
+function nearestValidPoint(x, y, points = []) {
+  let smIndex = 10e7,
+    smDist = 10e7;
+  const calcDistance = (p) => {
+    return Math.abs(p[0] - x) + Math.abs(p[1] - y);
+  };
 
-  let validTest = false;
-  let smallestNum = 99999999;
-  let validIndex;
-  let smallestIndex= 99999999;
-  for (let i = 0; i < points.length; i++) {
-    if (points[i][0] == x || points[i][1] == y) {
-      let temp = distance([x, y], points[i]);
-      validTest = true;
-      // get smallest distance
-      if (smallestNum==temp) {
-        if (smallestIndex>i){
-          smallestIndex=i;
-        }
-      }
-      if (smallestNum>temp) {
-        smallestNum=temp;
-        validIndex=i;
+  points.map((p, i) => {
+    if (p[0] == x || p[1] == y) {
+      const distance = calcDistance(p);
+      if (smDist > distance) {
+        smDist = distance;
+        smIndex = i;
+      } else if (smDist == distance) {
+        smIndex = Math.min(smIndex, i);
       }
     }
-  }
-  if (validTest==false){
-    return(-1);
-  }
-  else{
-    return(validIndex);
-  }
+  });
+  return smIndex == 10e7 ? -1 : smIndex;
 }
